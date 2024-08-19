@@ -147,16 +147,23 @@
             messageRow.appendChild(messageContent);
             chatContainer.insertBefore(messageRow, document.getElementById('inputContainer'));
             chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            return messageContent;
         }
 
         async function fetchAnswerFromAPI(question, loadingMessageElement) {
             try {
                 const apiUrl = `https://ashlynn.darkhacker7301.workers.dev/?question=${encodeURIComponent(question)}&state=Zenith`;
                 const response = await fetch(apiUrl);
-                const data = await response.json();
-                const answer = data.answer;
 
-                loadingMessageElement.textContent = `Zenith: ${answer}`;
+                if (response.ok) {
+                    const data = await response.json();
+                    const answer = data.answer || "I'm sorry, I couldn't retrieve an answer at this time.";
+                    loadingMessageElement.textContent = `Zenith: ${answer}`;
+                } else {
+                    loadingMessageElement.textContent = "Zenith: Sorry, I couldn't fetch the answer. Please try again.";
+                }
+
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             } catch (error) {
                 loadingMessageElement.textContent = "Zenith: Oops! An error occurred while fetching the answer.";
@@ -169,6 +176,8 @@
                 addMessage(`You: ${userMessage}`, 'user');
 
                 const loadingMessageElement = addMessage("Zenith: Answer is loading...", 'zenith');
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+
                 await fetchAnswerFromAPI(userMessage, loadingMessageElement); // Wait for the answer
             }
             questionTypeBox.value = '';
@@ -179,4 +188,3 @@
     </script>
 </body>
 </html>
-
