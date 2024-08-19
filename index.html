@@ -25,6 +25,8 @@
             padding: 20px;
             overflow-y: auto;
             background: #1c1c1e;
+            scrollbar-width: thin;
+            scrollbar-color: #3a3a3c #1c1c1e;
         }
 
         .message-row {
@@ -69,11 +71,11 @@
             align-items: center;
             width: 100%;
             max-width: 800px;
-            margin: 15px auto 0;
             background: #2c2c2e;
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-top: 10px;
         }
 
         #questionTypeBox {
@@ -117,10 +119,11 @@
 </head>
 <body>
     <div id="chat-container">
-        <div id="inputContainer">
-            <input type="text" id="questionTypeBox" placeholder="Type your question...">
-            <button id="sendButton">Send</button>
-        </div>
+        <!-- Messages will appear here -->
+    </div>
+    <div id="inputContainer">
+        <input type="text" id="questionTypeBox" placeholder="Type your question...">
+        <button id="sendButton">Send</button>
     </div>
 
     <script>
@@ -145,14 +148,10 @@
             messageContent.textContent = message;
 
             messageRow.appendChild(messageContent);
-            chatContainer.insertBefore(messageRow, document.getElementById('inputContainer'));
+            chatContainer.appendChild(messageRow);
 
-            // Scroll to the bottom to show the latest message
-            setTimeout(() => {
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 100);
-
-            return messageContent;
+            // Ensure the chat scrolls to the bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         async function fetchAnswerFromAPI(question, loadingMessageElement) {
@@ -167,11 +166,12 @@
                 } else {
                     loadingMessageElement.textContent = "Zenith: Sorry, I couldn't fetch the answer. Please try again.";
                 }
-
-                chatContainer.scrollTop = chatContainer.scrollHeight;
             } catch (error) {
                 loadingMessageElement.textContent = "Zenith: Oops! An error occurred while fetching the answer.";
             }
+
+            // Ensure the chat scrolls to the bottom after receiving the response
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         async function sendMessage() {
@@ -180,7 +180,6 @@
                 addMessage(`You: ${userMessage}`, 'user');
 
                 const loadingMessageElement = addMessage("Zenith: Answer is loading...", 'zenith');
-                chatContainer.scrollTop = chatContainer.scrollHeight;
 
                 await fetchAnswerFromAPI(userMessage, loadingMessageElement); // Wait for the answer
             }
