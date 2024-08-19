@@ -146,7 +146,11 @@
 
             messageRow.appendChild(messageContent);
             chatContainer.insertBefore(messageRow, document.getElementById('inputContainer'));
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Scroll to the bottom to show the latest message
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
 
             return messageContent;
         }
