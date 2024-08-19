@@ -9,18 +9,15 @@
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            background: #000000;
-            background-image: radial-gradient(circle at center, #121212, #000000), url('https://i.ibb.co/WcfS0zX/electric-bg.gif');
-            background-size: cover;
-            background-blend-mode: overlay;
-            color: #ffffff;
+            background: #1c1c1e;
+            color: #e1e1e1;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
         #banner {
-            background-color: #1f1f1f;
+            background-color: #2d2d30;
             color: #00ccff;
             padding: 10px;
             text-align: center;
@@ -36,18 +33,19 @@
             flex-direction: column;
             justify-content: flex-end;
             align-items: center;
-            margin: 20px;
+            padding: 20px;
+            background: #1c1c1e;
         }
 
         #chatbox {
             width: 100%;
             max-width: 600px;
-            max-height: 400px;
+            max-height: 70vh;
             overflow-y: auto;
-            background: rgba(18, 18, 18, 0.9);
-            border: 1px solid #00ccff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff;
+            background: #2c2c2e;
+            border: 1px solid #3a3a3c;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
             padding: 10px;
@@ -55,73 +53,72 @@
 
         .user-message {
             text-align: right;
-            color: #ffffff;
+            color: #e1e1e1;
             display: flex;
             align-items: center;
-            margin: 10px;
+            justify-content: flex-end;
+            margin: 5px 0;
         }
 
         .bot-message {
             text-align: left;
-            color: #ffffff;
+            color: #e1e1e1;
             display: flex;
             align-items: center;
-            margin: 10px;
+            justify-content: flex-start;
+            margin: 5px 0;
         }
 
         .message {
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #00ccff;
+            padding: 10px 15px;
+            border-radius: 18px;
+            background: #3a3a3c;
+            max-width: 80%;
             word-wrap: break-word;
             white-space: pre-line;
-            background: rgba(0, 0, 0, 0.7);
-            box-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff;
-            transition: transform 0.3s ease;
         }
 
-        .message:hover {
-            transform: scale(1.05);
+        .user-message .message {
+            background: #007bff;
+            color: #fff;
         }
 
-        .user-logo {
+        .bot-message .message {
+            background: #2c2c2e;
+            color: #e1e1e1;
+        }
+
+        .user-logo, .chatbot-logo {
             width: 30px;
             height: 30px;
             margin-left: 10px;
             border-radius: 50%;
-            box-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff;
-        }
-
-        .chatbot-logo {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff;
+            background-color: #007bff;
         }
 
         #inputContainer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid #00ccff;
-            padding: 10px;
             width: 100%;
-            background-color: #1f1f1f;
-            border-radius: 8px;
-            box-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff;
+            max-width: 600px;
+            margin-top: 15px;
+            background: #2c2c2e;
+            padding: 5px 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         #questionTypeBox {
-            flex: 1;
+            flex-grow: 1;
             padding: 10px;
-            border: 1px solid #00ccff;
+            border: none;
             outline: none;
             font-size: 16px;
-            border-radius: 20px;
-            background: #121212;
-            color: #ffffff;
-            box-shadow: inset 0 0 10px #00ccff, inset 0 0 20px #00ccff;
+            border-radius: 5px;
+            background: #1c1c1e;
+            color: #e1e1e1;
+            margin-right: 10px;
         }
 
         #sendButton {
@@ -131,15 +128,13 @@
             border: none;
             color: white;
             cursor: pointer;
-            border-radius: 20px;
-            font-size: 18px;
-            box-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
 
         #sendButton:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 15px #00ccff, 0 0 30px #00ccff;
+            background-color: #00a3cc;
         }
 
     </style>
@@ -151,7 +146,6 @@
     <div id="chat-container">
         <div id="chatbox"></div>
         <div id="inputContainer">
-            <img id="userLogo" src="http://telegra.ph/file/be3864b1ac58b1231b6d2.jpg" alt="User Logo">
             <input type="text" id="questionTypeBox" placeholder="Type your question...">
             <button id="sendButton">Send</button>
         </div>
@@ -172,14 +166,11 @@
 
         function addMessage(message, isUser = false) {
             const messageElement = document.createElement('div');
-            messageElement.className = isUser ? 'user-message message' : 'bot-message message';
-            if (isUser) {
-                const userLogo = document.createElement('img');
-                userLogo.className = 'user-logo';
-                userLogo.src = 'http://telegra.ph/file/be3864b1ac58b1231b6d2.jpg';
-                messageElement.appendChild(userLogo);
-            }
-            messageElement.textContent = message;
+            messageElement.className = isUser ? 'user-message' : 'bot-message';
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message';
+            messageContent.textContent = message;
+            messageElement.appendChild(messageContent);
             chatbox.appendChild(messageElement);
             chatbox.scrollTop = chatbox.scrollHeight;
         }
@@ -191,14 +182,11 @@
                 const data = await response.json();
                 const answer = data.answer;
 
-                const loadingMessage = chatbox.querySelector('.bot-message.message:last-child');
+                const loadingMessage = chatbox.querySelector('.bot-message .message:last-child');
                 if (loadingMessage) {
                     loadingMessage.textContent = `Bot: ${answer}`;
                 } else {
-                    const botMessage = document.createElement('div');
-                    botMessage.className = 'bot-message message';
-                    botMessage.textContent = `Bot: ${answer}`;
-                    chatbox.appendChild(botMessage);
+                    addMessage(`Bot: ${answer}`);
                 }
 
                 chatbox.scrollTop = chatbox.scrollHeight;
@@ -213,9 +201,14 @@
                 addMessage(`You: ${userMessage}`, true);
 
                 const loadingMessage = document.createElement('div');
-                loadingMessage.className = 'bot-message message';
-                loadingMessage.textContent = "Bot: Answer is loading...";
+                loadingMessage.className = 'bot-message';
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message';
+                messageContent.textContent = "Bot: Answer is loading...";
+                loadingMessage.appendChild(messageContent);
                 chatbox.appendChild(loadingMessage);
+
+                chatbox.scrollTop = chatbox.scrollHeight;
 
                 await fetchAnswerFromAPI(userMessage); // Wait for the answer
             }
