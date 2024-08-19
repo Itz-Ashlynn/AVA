@@ -13,18 +13,7 @@
             color: #e1e1e1;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-        }
-
-        #banner {
-            background-color: #2d2d30;
-            color: #00ccff;
-            padding: 10px;
-            text-align: center;
-            font-size: 24px;
-            text-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff;
-            box-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff;
-            border-bottom: 2px solid #00ccff;
+            height: 100vh;
         }
 
         #chat-container {
@@ -34,43 +23,27 @@
             justify-content: flex-end;
             align-items: center;
             padding: 20px;
+            overflow-y: auto;
             background: #1c1c1e;
         }
 
-        #chatbox {
+        .message-row {
             width: 100%;
-            max-width: 600px;
-            max-height: 70vh;
-            overflow-y: auto;
-            background: #2c2c2e;
-            border: 1px solid #3a3a3c;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
             display: flex;
-            flex-direction: column;
-            padding: 10px;
+            margin: 10px 0;
         }
 
         .user-message {
-            text-align: right;
-            color: #e1e1e1;
-            display: flex;
-            align-items: center;
             justify-content: flex-end;
-            margin: 5px 0;
         }
 
-        .bot-message {
-            text-align: left;
-            color: #e1e1e1;
-            display: flex;
-            align-items: center;
+        .zenith-message {
             justify-content: flex-start;
-            margin: 5px 0;
         }
 
         .message {
-            padding: 10px 15px;
+            padding: 12px 20px;
             border-radius: 18px;
             background: #3a3a3c;
             max-width: 80%;
@@ -80,20 +53,14 @@
 
         .user-message .message {
             background: #007bff;
-            color: #fff;
+            color: #ffffff;
+            align-self: flex-end;
         }
 
-        .bot-message .message {
+        .zenith-message .message {
             background: #2c2c2e;
             color: #e1e1e1;
-        }
-
-        .user-logo, .chatbot-logo {
-            width: 30px;
-            height: 30px;
-            margin-left: 10px;
-            border-radius: 50%;
-            background-color: #007bff;
+            align-self: flex-start;
         }
 
         #inputContainer {
@@ -101,10 +68,10 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            max-width: 600px;
-            margin-top: 15px;
+            max-width: 800px;
+            margin: 15px auto 0;
             background: #2c2c2e;
-            padding: 5px 10px;
+            padding: 10px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
@@ -122,7 +89,7 @@
         }
 
         #sendButton {
-            width: 70px;
+            width: 80px;
             height: 40px;
             background-color: #00ccff;
             border: none;
@@ -137,14 +104,19 @@
             background-color: #00a3cc;
         }
 
+        #chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat-container::-webkit-scrollbar-thumb {
+            background-color: #3a3a3c;
+            border-radius: 4px;
+        }
+
     </style>
 </head>
 <body>
-    <div id="banner">
-        <h1>Zenith Ai WEB</h1>
-    </div>
     <div id="chat-container">
-        <div id="chatbox"></div>
         <div id="inputContainer">
             <input type="text" id="questionTypeBox" placeholder="Type your question...">
             <button id="sendButton">Send</button>
@@ -152,7 +124,7 @@
     </div>
 
     <script>
-        const chatbox = document.getElementById('chatbox');
+        const chatContainer = document.getElementById('chat-container');
         const questionTypeBox = document.getElementById('questionTypeBox');
         const sendButton = document.getElementById('sendButton');
 
@@ -164,19 +136,17 @@
             }
         });
 
-        function addMessage(message, isUser = false) {
-            const messageElement = document.createElement('div');
-            messageElement.className = isUser ? 'user-message' : 'bot-message';
+        function addMessage(message, sender = 'zenith') {
+            const messageRow = document.createElement('div');
+            messageRow.className = `message-row ${sender === 'user' ? 'user-message' : 'zenith-message'}`;
 
             const messageContent = document.createElement('div');
             messageContent.className = 'message';
             messageContent.textContent = message;
 
-            messageElement.appendChild(messageContent);
-            chatbox.appendChild(messageElement);
-            chatbox.scrollTop = chatbox.scrollHeight;
-
-            return messageElement;
+            messageRow.appendChild(messageContent);
+            chatContainer.insertBefore(messageRow, document.getElementById('inputContainer'));
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         async function fetchAnswerFromAPI(question, loadingMessageElement) {
@@ -186,25 +156,26 @@
                 const data = await response.json();
                 const answer = data.answer;
 
-                loadingMessageElement.textContent = `Bot: ${answer}`;
-                chatbox.scrollTop = chatbox.scrollHeight;
+                loadingMessageElement.textContent = `Zenith: ${answer}`;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
             } catch (error) {
-                loadingMessageElement.textContent = "Oops! An error occurred while fetching the answer.";
+                loadingMessageElement.textContent = "Zenith: Oops! An error occurred while fetching the answer.";
             }
         }
 
         async function sendMessage() {
             const userMessage = questionTypeBox.value;
             if (userMessage.trim() !== '') {
-                addMessage(`You: ${userMessage}`, true);
+                addMessage(`You: ${userMessage}`, 'user');
 
-                const loadingMessageElement = addMessage("Bot: Answer is loading...");
-                chatbox.scrollTop = chatbox.scrollHeight;
-
+                const loadingMessageElement = addMessage("Zenith: Answer is loading...", 'zenith');
                 await fetchAnswerFromAPI(userMessage, loadingMessageElement); // Wait for the answer
             }
             questionTypeBox.value = '';
         }
+
+        // Initial greeting from Zenith
+        addMessage("Hello! I'm Zenith AI, your ultimate assistant. How can I help you today? Feel free to ask me anything or give me a task!");
     </script>
 </body>
 </html>
