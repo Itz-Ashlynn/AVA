@@ -150,18 +150,18 @@
         // Fetch the answer from the API and update the loading message with the response
         async function fetchAnswerFromAPI(question, loadingMessageElement) {
             try {
-                const apiUrl = `https://ashlynn.darkhacker7301.workers.dev/?question=${encodeURIComponent(question)}&state=Zenith`;
+                const apiUrl = `https://chat.itz-ashlynn.workers.dev/?question=${encodeURIComponent(question)}`;
                 const response = await fetch(apiUrl);
 
                 if (response.ok) {
                     const data = await response.json();
-                    const answer = data.answer || "I'm sorry, I couldn't retrieve an answer at this time.";
-                    loadingMessageElement.textContent = `Zenith: ${answer}`;
+                    const answer = data.message || "I'm sorry, I couldn't retrieve an answer at this time.";
+                    loadingMessageElement.textContent = `${answer}`;
                 } else {
-                    loadingMessageElement.textContent = "Zenith: Sorry, I couldn't fetch the answer. Please try again.";
+                    loadingMessageElement.textContent = "AVA: Sorry, I couldn't fetch the answer. Please try again.";
                 }
             } catch (error) {
-                loadingMessageElement.textContent = "Zenith: Oops! An error occurred while fetching the answer.";
+                loadingMessageElement.textContent = "AVA: Oops! An error occurred while fetching the answer.";
             }
 
             scrollToBottom();
@@ -173,7 +173,7 @@
             if (userMessage !== '') {
                 addMessage(`You: ${userMessage}`, 'user');
 
-                const loadingMessageElement = addMessage("Zenith: Answer is loading...", 'zenith');
+                const loadingMessageElement = addMessage("AVA: Answer is loading...", 'zenith');
                 await fetchAnswerFromAPI(userMessage, loadingMessageElement);
             }
             questionTypeBox.value = '';
@@ -189,7 +189,7 @@
         });
 
         // Initial greeting from Zenith AI
-        addMessage("Hello! I'm Zenith AI, your ultimate assistant. How can I help you today? Feel free to ask me anything or give me a task!");
+        addMessage("Hello! I'm AVA AI, your ultimate GF assistant. How can I help you today? Feel free to ask me anything or give me a task!");
     </script>
 </body>
 </html>
