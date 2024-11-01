@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>Zenith AI Chatbot</title>
+    <title>AVA AI Chatbot</title>
     <style>
         body {
             margin: 0;
@@ -173,7 +173,7 @@
             if (userMessage !== '') {
                 addMessage(`You: ${userMessage}`, 'user');
 
-                const loadingMessageElement = addMessage("AVA: Answer is loading...", 'zenith');
+                const loadingMessageElement = addMessage("AVA: Answer is loading...", 'AVA');
                 await fetchAnswerFromAPI(userMessage, loadingMessageElement);
             }
             questionTypeBox.value = '';
