@@ -1,5 +1,5 @@
 <html><head><base href="https://ashlynn.modsmatrix.com/"><link href="./styles.css" rel="stylesheet"></link>
-<title>Dark AI</title>
+<title>ChatGPT AI</title>
 <link rel="icon" type="image/png" href="https://iili.io/2nNV2I4.png">
 <style>
 :root {
@@ -154,7 +154,7 @@ body {
       <svg viewBox="0 0 24 24">
         <path fill="#8e24aa" d="M12 2L2 19h20L12 2zm0 4l6.93 11H5.07L12 6z"/>
       </svg>
-      <span class="logo-text">Uncensored AI</span>
+      <span class="logo-text">ChatGPT AI</span>
     </a>
     <button class="menu-button" onclick="window.location.href='https://t.me/Ashlynn_Repository';" style="font-size: 24px; color: grey; background: none; border: none; cursor: pointer;">
       ⚡
@@ -168,7 +168,7 @@ body {
       </svg>
     </div>
     
-    <h1 class="title">Hello, I'm Dark AI</h1>
+    <h1 class="title">Hello, I'm ChatGPT AI</h1>
     <p class="subtitle">How can I help you today?</p>
 
     <div class="chat-container">
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Fetch API response
       try {
-        const response = await fetch(`https://nexlynx.ashlynn.workers.dev/api/dark?question=${encodeURIComponent(message)}`);
+        const response = await fetch(`https://nexlynx.ashlynn.workers.dev/api/live?question=${encodeURIComponent(message)}`);
         const data = await response.json();
 
         // Remove typing indicator
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
     typingIndicator.style.textAlign = 'left';
     typingIndicator.style.margin = '1rem 0';
     typingIndicator.style.fontStyle = 'italic';
-    typingIndicator.textContent = 'Uncensored AI is typing...';
+    typingIndicator.textContent = 'ChatGPT AI is typing...';
     chatContainer.appendChild(typingIndicator);
   }
 
